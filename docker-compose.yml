@@ -1,35 +1,20 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:6-jammy
-    container_name: mean_mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - mean-network
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: nithiyab12/mean-backend:latest
     container_name: mean_backend
     ports:
       - "8080:8080"
     environment:
       - PORT=8080
-      - MONGO_URL=mongodb://mongodb:27017/dd_db
-    depends_on:
-      - mongodb
+      # The backend will automatically fall back to your MongoDB Atlas URI defined in db.config.js
     networks:
       - mean-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: nithiyab12/mean-frontend:latest
     container_name: mean_frontend
     ports:
       - "50266:80"
@@ -37,10 +22,6 @@ services:
       - backend
     networks:
       - mean-network
-
-volumes:
-  mongo-data:
-
 
 networks:
   mean-network:
