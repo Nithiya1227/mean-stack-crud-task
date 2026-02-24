@@ -1,87 +1,171 @@
 
----
-
 # MEAN Stack CRUD Application
 
-This repository contains a full-stack web application built using the **MEAN stack** — *MongoDB, Express.js, Angular 15, and Node.js* — that supports Create, Read, Update, and Delete (CRUD) operations for managing tutorials. The backend offers REST APIs using **Node.js** and **Express**, while the frontend is developed with **Angular** and communicates with the server using Angular’s `HttpClient`.
+### Dockerized Deployment on AWS EC2 with Nginx
 
-## Project Overview
+Live Deploy Link : **http://13.233.238.236** 
 
-This application allows users to perform the following core tasks:
+## Project Summary
 
-* **Create** new tutorials with title and description.
-* **Read** and list all tutorials stored in the database.
-* **Update** the details of an existing tutorial.
-* **Delete** single or multiple tutorials.
-* **Search** tutorials by title.
+This project is a full-stack CRUD (Create, Read, Update, Delete) web application developed using the MEAN stack — MongoDB, Express.js, Angular, and Node.js.
 
-The goal of this project is to demonstrate a working full-stack solution using a popular JavaScript stack that handles data persistence, API development, and frontend interaction.
+The application is containerized using Docker and deployed on an AWS EC2 Ubuntu instance. Nginx is configured on the EC2 server to act as a reverse proxy, routing client requests to the appropriate Docker containers.
 
-## Tech Stack
+The project demonstrates practical experience in full-stack development, containerization, cloud deployment, and server configuration.
 
-This application leverages the following technologies:
+---
 
-* **MongoDB** — A NoSQL database for storing tutorial records.
-* **Express.js** — Backend framework to build RESTful APIs.
-* **Angular 15** — Frontend framework for building the UI and handling data interaction.
-* **Node.js** — Runtime environment for executing the backend.
+## System Architecture
 
-## Features
+The application follows a client–server model:
 
-✔ Angular frontend with a responsive user interface
-✔ REST API endpoints for tutorial management
-✔ Search tutorials by title
-✔ CRUD operations fully implemented
-✔ Client-server communication using HTTP requests
+* The Angular frontend runs inside a Docker container.
+* The Node.js + Express backend runs in a separate Docker container.
+* MongoDB stores application data.
+* Nginx (installed directly on the EC2 Ubuntu instance) handles incoming HTTP traffic and forwards API requests to the backend container.
+
+### Request Flow
+
+User → EC2 Public IP
+→ Nginx (Reverse Proxy)
+→ Angular Frontend Container
+→ Node.js Backend Container
+→ MongoDB Database
+
+Nginx ensures the backend service is not directly exposed to the internet.
+
+---
+
+## Technologies Used
+
+**Frontend**
+
+* Angular
+* TypeScript
+* HTML & CSS
+
+**Backend**
+
+* Node.js
+* Express.js
+
+**Database**
+
+* MongoDB
+
+**Infrastructure & DevOps**
+
+* Docker
+* AWS EC2 (Ubuntu)
+* Nginx (Reverse Proxy)
+
+---
+
+## Application Features
+
+* Add new tutorial records
+* Retrieve all tutorials
+* Update existing tutorials
+* Delete tutorials
+* Search tutorials by title
+* RESTful API integration between frontend and backend
+* Containerized application services
+* Cloud-hosted deployment
+
+---
+
+## Docker Implementation
+
+Both frontend and backend services are packaged into separate Docker images.
+
+### Build Backend Image
+
+```bash
+cd backend
+docker build -t mean-backend .
+```
+
+### Build Frontend Image
+
+```bash
+cd frontend
+docker build -t mean-frontend .
+```
+
+### Run Containers
+
+```bash
+docker run -d -p 5000:5000 mean-backend
+docker run -d -p 80:80 mean-frontend
+```
+
+Port mappings may differ depending on your EC2 configuration.
+
+---
+
+## ☁ Deployment on AWS EC2
+
+The project is deployed on an Ubuntu-based EC2 instance using the following process:
+
+1. Launch EC2 instance
+2. Configure Security Group to allow HTTP traffic (Port 80)
+3. Install Docker on Ubuntu
+4. Install and configure Nginx
+5. Clone the repository
+6. Build Docker images
+7. Run containers
+8. Configure Nginx reverse proxy settings
+
+After setup, the application is accessible via the EC2 public IP address.
+
+---
+
+## Nginx Reverse Proxy Setup
+
+Nginx is configured to:
+
+* Serve the Angular frontend
+* Forward API requests (for example, `/api`) to the backend container
+* Handle incoming HTTP traffic securely
+* Prevent direct exposure of backend service
+
+This improves application structure and security.
+
+---
 
 ## Project Structure
 
 ```
-/
-├── backend/         # Express/Node.js API server
-├── frontend/        # Angular 15 application
-├── docker-compose.yml
-└── README.md        # Documentation
+mean-stack-crud-task/
+
+>backend/        # Express API and database configuration
+> frontend/       # Angular client application
+> Dockerfile      # Backend Docker configuration
+> docker-compose.yml (optional)
+> README.md
 ```
 
-## 🛠 Prerequisites
+---
 
-Before running the project, ensure the following are installed:
+## Running the Project Locally (Without Docker)
 
-* Node.js (v14 or higher)
-* npm (Node Package Manager)
-* Angular CLI (for frontend)
-* MongoDB (running locally or MongoDB Atlas configured)
-
-## How to Run
-
-### 1. Backend (API Server)
+### Backend
 
 ```bash
 cd backend
 npm install
-# Set your MongoDB connection configs in `db.config.js`
 node server.js
 ```
 
-### 2. Frontend (Angular Client)
+### Frontend
 
 ```bash
 cd frontend
 npm install
-ng serve --port 8081
+ng serve
 ```
 
-Once both backend and frontend are running, open your browser and navigate to:
 
-http://13.233.238.236/
+* A clean architecture diagram explanation
 
-1.Project Configuration
-
-* You can update the MongoDB credentials in the backend config file.
-* To modify how the Angular app interacts with the backend, adjust service files like `tutorial.service.ts`.
-2.Contributing
-
-Contributions are welcome! Feel free to submit pull requests or open issues if you find bugs, need help, or want to suggest improvements.
-
-
+Just let me know.
